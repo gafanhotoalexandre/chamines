@@ -15,7 +15,7 @@ O Chaminé's é uma versão simplificada do app Threads, uma rede social que per
 ## Funcionalidades
 - Compartilhe postagens de texto com seus amigos mais próximos.
 - Conecte-se de forma mais íntima com amigos e compartilhe momentos especiais.
-- Uma versão simplificada, perfeita para desenvolvedores iniciantes.
+- Uma alternativa divertida e personalizada para compartilhar momentos especiais com seus amigos mais próximos.
 
 ## Tecnologias
 Este projeto utiliza as seguintes tecnologias:
@@ -23,3 +23,14 @@ Este projeto utiliza as seguintes tecnologias:
 - Next.js
 - TypeScript
 - Tailwind CSS
+- e muito mais
+
+### Instalação
+Clone o repositório e instale as dependências:
+
+```bash
+git clone https://github.com/gafanhotoalexandre/chamines.git
+cd chamines
+npm install
+npm run dev
+```
