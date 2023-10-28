@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
+import { ptBR } from '@clerk/localizations'
 
 import '../globals.css'
 
@@ -17,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider localization={ptBR}>
       <html lang="pt-br">
         <body className={`${inter.className} bg-dark-1`}>{children}</body>
       </html>
