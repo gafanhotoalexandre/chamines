@@ -32,5 +32,21 @@ Clone o repositório e instale as dependências:
 git clone https://github.com/gafanhotoalexandre/chamines.git
 cd chamines
 npm install
+```
+
+Copie o conteúdo de ``` .env.example ``` para ``` .env.local ``` e preencha as variáveis de ambiente:
+
+```bash
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/onboarding
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
+```
+
+Por fim, execute:
+```bash
 npm run dev
 ```
