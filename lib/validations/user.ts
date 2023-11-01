@@ -5,8 +5,17 @@ export const UserValidation = z.object({
     .string({
       required_error: 'o valor deve ser preenchido.',
     })
-    .url(),
-  name: z.string().min(3).max(30),
-  username: z.string().min(3).max(30),
-  bio: z.string().min(3).max(1000),
+    .url('URL inválida'),
+  name: z
+    .string()
+    .min(3, 'Deve conter, no mínimo, 3 caracteres')
+    .max(30, 'Deve conter, no máximo, 30 caracteres'),
+  username: z
+    .string()
+    .min(3, 'Deve conter, no mínimo, 3 caracteres')
+    .max(30, 'Deve conter, no máximo, 30 caracteres'),
+  bio: z
+    .string()
+    .min(3, 'Deve conter, no mínimo 3, caracteres')
+    .max(1000, 'Deve conter, no máximo, 1000 caracteres'),
 })
