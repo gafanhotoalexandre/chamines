@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { useUploadThing } from '@/lib/uploadthing'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -19,6 +20,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { UserValidation } from '@/lib/validations/user'
+import { isBase64Image } from '@/lib/utils'
 
 interface AccountProfileProps {
   user: {
@@ -33,6 +35,7 @@ interface AccountProfileProps {
 }
 export function AccountProfile({ user, btnTitle }: AccountProfileProps) {
   const [files, setFiles] = useState<File[]>([])
+  const { startUpload } = useUploadThing('media')
 
   const form = useForm({
     resolver: zodResolver(UserValidation),
@@ -68,8 +71,20 @@ export function AccountProfile({ user, btnTitle }: AccountProfileProps) {
     }
   }
 
-  function onSubmit(values: z.infer<typeof UserValidation>) {
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof UserValidation>) {
+    const blob = values.profile_photo
+
+    const hasImageChanged = isBase64Image(blob)
+
+    if (hasImageChanged) {
+      const imgRes = await startUpload(files)
+
+      if (imgRes && imgRes[0].url) {
+        values.profile_photo = imgRes[0].url
+      }
+    }
+
+    // update user profile
   }
 
   return (
