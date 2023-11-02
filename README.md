@@ -20,9 +20,11 @@ O Chaminé's é uma versão simplificada do app Threads, uma rede social que per
 ## Tecnologias
 Este projeto utiliza as seguintes tecnologias:
 
-- Next.js
+- Next.js with Server Actions
 - TypeScript
 - Tailwind CSS
+- Shadcn
+- Clerk Authentication
 - e muito mais
 
 ### Instalação
