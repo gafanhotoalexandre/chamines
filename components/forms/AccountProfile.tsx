@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Image from 'next/image'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -31,25 +32,44 @@ interface AccountProfileProps {
   btnTitle: string
 }
 export function AccountProfile({ user, btnTitle }: AccountProfileProps) {
+  const [files, setFiles] = useState<File[]>([])
+
   const form = useForm({
     resolver: zodResolver(UserValidation),
     defaultValues: {
-      profile_photo: '',
-      name: '',
-      username: '',
-      bio: '',
+      profile_photo: user?.image || '',
+      name: user?.name || '',
+      username: user?.username || '',
+      bio: user?.bio || '',
     },
   })
 
-  function onSubmit(values: z.infer<typeof UserValidation>) {
-    console.log(values)
-  }
-
   function handleImage(
-    e: React.ChangeEvent,
+    e: React.ChangeEvent<HTMLInputElement>,
     fieldChange: (value: string) => void,
   ) {
     e.preventDefault()
+
+    const fileReader = new FileReader()
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0]
+
+      setFiles(Array.from(e.target.files))
+
+      if (!file.type.includes('image')) return
+
+      fileReader.onload = async (event) => {
+        const imageDataUrl = event.target?.result?.toString() || ''
+
+        fieldChange(imageDataUrl)
+      }
+
+      fileReader.readAsDataURL(file)
+    }
+  }
+
+  function onSubmit(values: z.infer<typeof UserValidation>) {
+    console.log(values)
   }
 
   return (
@@ -102,7 +122,7 @@ export function AccountProfile({ user, btnTitle }: AccountProfileProps) {
           control={form.control}
           name="name"
           render={({ field }) => (
-            <FormItem className="flex items-center gap-3 w-full">
+            <FormItem className="flex flex-col gap-3 w-full">
               <FormLabel className="text-base-semibold text-light-2">
                 Nome
               </FormLabel>
@@ -123,7 +143,7 @@ export function AccountProfile({ user, btnTitle }: AccountProfileProps) {
           control={form.control}
           name="username"
           render={({ field }) => (
-            <FormItem className="flex items-center gap-3 w-full">
+            <FormItem className="flex flex-col gap-3 w-full">
               <FormLabel className="text-base-semibold text-light-2">
                 Username
               </FormLabel>
@@ -144,7 +164,7 @@ export function AccountProfile({ user, btnTitle }: AccountProfileProps) {
           control={form.control}
           name="bio"
           render={({ field }) => (
-            <FormItem className="flex items-center gap-3 w-full">
+            <FormItem className="flex flex-col gap-3 w-full">
               <FormLabel className="text-base-semibold text-light-2">
                 Biografia
               </FormLabel>
@@ -161,7 +181,7 @@ export function AccountProfile({ user, btnTitle }: AccountProfileProps) {
         />
 
         <Button className="bg-primary-500" type="submit">
-          Submit
+          Salvar
         </Button>
       </form>
     </Form>
