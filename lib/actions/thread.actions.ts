@@ -80,3 +80,42 @@ export async function fetchThreads(pageNumber = 1, pageSize = 20) {
     throw new Error(`Impossível recuperar as threads: ${error.message}`)
   }
 }
+
+export async function fetchThreadById(id: string) {
+  try {
+    connectToDB()
+
+    // TODO: populate community
+    const thread = await Thread.findById(id)
+      .populate({
+        path: 'author',
+        model: User,
+        select: '_id id name image',
+      })
+      .populate({
+        path: 'children',
+        populate: [
+          {
+            path: 'author',
+            model: User,
+            select: '_id id name parentId image',
+          },
+          {
+            path: 'children',
+            model: Thread,
+            populate: {
+              path: 'author',
+              model: User,
+              select: '_id id name parentId image',
+            },
+          },
+        ],
+      })
+      .exec()
+
+    return thread
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error(`Impossível recuperar a thread: ${error.message}`)
+  }
+}
