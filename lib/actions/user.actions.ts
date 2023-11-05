@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import User from '../models/user.model'
-import { conntectToDB } from '../mongoose'
+import { connectToDB } from '../mongoose'
 
 interface Params {
   userId: string
@@ -20,7 +20,7 @@ export async function updateUser({
   image,
   path,
 }: Params): Promise<void> {
-  conntectToDB()
+  connectToDB()
 
   try {
     await User.findOneAndUpdate(
@@ -41,5 +41,23 @@ export async function updateUser({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     throw new Error(`Falha ao criar/atualizar usuário: ${error.message}`)
+  }
+}
+
+export async function fetchUser(userId: string) {
+  try {
+    connectToDB()
+
+    return await User.findOne({ id: userId })
+    // .populate({
+    //   path: 'communities',
+    //   model: Community
+    // })
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error(
+      `Falha ao fazer o fetch de dados do usuário: ${error.message}`,
+    )
   }
 }
