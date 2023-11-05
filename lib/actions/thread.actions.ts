@@ -1,3 +1,5 @@
+'use server'
+
 import { revalidatePath } from 'next/cache'
 
 import { connectToDB } from '../mongoose'
@@ -18,18 +20,23 @@ export async function createThread({
   communityId,
   path,
 }: Params) {
-  connectToDB()
+  try {
+    connectToDB()
 
-  const createdThread: ThreadInfo = await Thread.create({
-    text,
-    author,
-    community: null,
-  })
+    const createdThread: ThreadInfo = await Thread.create({
+      text,
+      author,
+      community: communityId,
+    })
 
-  // update user model
-  await User.findByIdAndUpdate(author, {
-    $push: { threads: createdThread._id },
-  })
+    // update user model
+    await User.findByIdAndUpdate(author, {
+      $push: { threads: createdThread._id },
+    })
 
-  revalidatePath(path)
+    revalidatePath(path)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error(`Erro ao criar uma thread: ${error.message}`)
+  }
 }

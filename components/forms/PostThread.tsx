@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/form'
 
 import { ThreadValidation } from '@/lib/validations/thread'
-import { type } from 'os'
+import { createThread } from '@/lib/actions/thread.actions'
 // import { updateUser } from '@/lib/actions/user.actions'
 
 interface PostThreadProps {
@@ -35,7 +35,16 @@ export function PostThread({ userId }: PostThreadProps) {
     },
   })
 
-  function onSubmit() {}
+  async function onSubmit(values: z.infer<typeof ThreadValidation>) {
+    await createThread({
+      text: values.thread,
+      author: userId,
+      communityId: null,
+      path: pathname,
+    })
+
+    router.push('/')
+  }
 
   return (
     <>
