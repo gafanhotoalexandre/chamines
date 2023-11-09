@@ -2,6 +2,8 @@ import { redirect } from 'next/navigation'
 import { currentUser } from '@clerk/nextjs'
 
 import { ThreadCard } from '@/components/cards/ThreadCard'
+import { Comment } from '@/components/forms/Comment'
+
 import { fetchUser } from '@/lib/actions/user.actions'
 import { UserInfo } from '@/types/UserInfo'
 import { fetchThreadById } from '@/lib/actions/thread.actions'
@@ -35,6 +37,14 @@ export default async function Page({ params }: Params) {
           community={thread.community}
           createdAt={thread.createdAt}
           comments={thread.children}
+        />
+      </div>
+
+      <div className="mt-7">
+        <Comment
+          threadId={thread.id}
+          currentUserImg={user.imageUrl}
+          currentUserId={JSON.stringify(userInfo._id)}
         />
       </div>
     </section>
