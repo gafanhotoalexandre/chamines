@@ -16,7 +16,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { createThread } from '@/lib/actions/thread.actions'
+import { addCommentToThread } from '@/lib/actions/thread.actions'
 import { CommentValidation } from '@/lib/validations/thread'
 
 interface CommentProps {
@@ -40,14 +40,14 @@ export function Comment({
   })
 
   async function onSubmit(values: z.infer<typeof CommentValidation>) {
-    // await createThread({
-    //   text: values.thread,
-    //   author: userId,
-    //   communityId: null,
-    //   path: pathname,
-    // })
+    await addCommentToThread({
+      commentText: values.thread,
+      threadId,
+      userId: JSON.parse(currentUserId),
+      path: pathname,
+    })
 
-    router.push('/')
+    form.reset()
   }
   return (
     <Form {...form}>
