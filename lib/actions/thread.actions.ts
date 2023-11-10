@@ -119,3 +119,45 @@ export async function fetchThreadById(id: string) {
     throw new Error(`Impossível recuperar a thread: ${error.message}`)
   }
 }
+
+interface AddCommentToThreadParams {
+  threadId: string
+  commentText: string
+  userId: string
+  path: string
+}
+
+export async function addCommentToThread({
+  threadId,
+  commentText,
+  userId,
+  path,
+}: AddCommentToThreadParams) {
+  connectToDB()
+
+  try {
+    const originalThread = await Thread.findById(threadId)
+
+    if (!originalThread) {
+      throw new Error('Thread não encontrada')
+    }
+
+    const commentThread = new Thread({
+      text: commentText,
+      author: userId,
+      parentId: threadId,
+    })
+
+    // saving the new thread
+    const savedCommentThread = await commentThread.save()
+    // updating the original thread to include the new comment
+    originalThread.children.push(savedCommentThread._id)
+    // saving the original thread
+    await originalThread.save()
+
+    revalidatePath(path)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error(`Erro ao adicionar comentário à thread: ${error.message}`)
+  }
+}
