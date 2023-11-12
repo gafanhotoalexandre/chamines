@@ -43,7 +43,7 @@ export default async function Page({ params }: Params) {
       <div className="mt-7">
         <Comment
           threadId={thread.id}
-          currentUserImg={user.imageUrl}
+          currentUserImg={userInfo.image!}
           currentUserId={JSON.stringify(userInfo._id)}
         />
       </div>
