@@ -49,6 +49,7 @@ export default async function Page({ params }: Params) {
       </div>
 
       <div className="mt-10">
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         {thread.children.map((childItem: any) => (
           <ThreadCard
             key={childItem._id}
