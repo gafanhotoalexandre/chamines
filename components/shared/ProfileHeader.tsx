@@ -8,7 +8,7 @@ interface ProfileHeaderProps {
   imgUrl: string
   bio: string
 }
-export default function ProfileHeader({
+export function ProfileHeader({
   accountId,
   authUserId,
   name,

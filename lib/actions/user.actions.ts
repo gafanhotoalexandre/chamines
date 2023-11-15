@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import User from '../models/user.model'
 import { connectToDB } from '../mongoose'
+import Thread from '../models/thread.model'
 
 interface Params {
   userId: string
@@ -59,5 +60,31 @@ export async function fetchUser(userId: string) {
     throw new Error(
       `Falha ao fazer o fetch de dados do usuário: ${error.message}`,
     )
+  }
+}
+
+export async function fetchUserThreads(userId: string) {
+  try {
+    connectToDB()
+    // encontrar todas as threads de autoria do usuário através do id fornecido
+    // TODO: Popular com comunidades
+    const threads = await User.findOne({ id: userId }).populate({
+      path: 'threads',
+      model: Thread,
+      populate: {
+        path: 'children',
+        model: Thread,
+        populate: {
+          path: 'author',
+          model: User,
+          select: 'name image id',
+        },
+      },
+    })
+
+    return threads
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error(`Falha ao buscar threads do usuário: ${error.message}`)
   }
 }
